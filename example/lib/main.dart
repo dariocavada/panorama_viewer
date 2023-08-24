@@ -79,7 +79,7 @@ class MyHomePageState extends State<MyHomePage> {
     switch (_panoId % panoImages.length) {
       case 0:
         panorama = PanoramaViewer(
-          animSpeed: .0,
+          animSpeed: .1,
           sensorControl: SensorControl.orientation,
           onViewChanged: onViewChanged,
           onTap: (longitude, latitude, tilt) =>
@@ -123,7 +123,7 @@ class MyHomePageState extends State<MyHomePage> {
         break;
       case 2:
         panorama = PanoramaViewer(
-          animSpeed: 0.0,
+          animSpeed: 0.1,
           sensorControl: SensorControl.orientation,
           onViewChanged: onViewChanged,
           /*croppedArea: const Rect.fromLTWH(2533.0, 1265.0, 5065.0, 2533.0),
@@ -151,7 +151,7 @@ class MyHomePageState extends State<MyHomePage> {
         break;
       default:
         panorama = PanoramaViewer(
-          animSpeed: 0.0,
+          animSpeed: 0.1,
           sensorControl: SensorControl.orientation,
           onViewChanged: onViewChanged,
           hotspots: [
