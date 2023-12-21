@@ -10,7 +10,7 @@ Add panorama as a dependency in your pubspec.yaml file.
 
 ```yaml
 dependencies:
-  panorama_viewer: ^1.0.1
+  panorama_viewer: ^1.0.2
 ```
 
 Import and add the Panorama Viewer widget to your project.
