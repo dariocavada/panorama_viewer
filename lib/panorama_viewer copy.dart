@@ -142,8 +142,8 @@ class PanoramaState extends State<PanoramaViewer>
     with SingleTickerProviderStateMixin {
   Scene? scene;
   Object? surface;
-  late double latitudeRad;
-  late double longitudeRad;
+  late double latitude;
+  late double longitude;
   double latitudeDelta = 0;
   double longitudeDelta = 0;
   double zoomDelta = 0;
@@ -153,7 +153,7 @@ class PanoramaState extends State<PanoramaViewer>
   double _dampingFactor = 0.05;
   double _animateDirection = 1.0;
   late AnimationController _controller;
-  double screenOrientationRad = 0.0;
+  double screenOrientation = 0.0;
   Vector3 orientation = Vector3(0, radians(90), 0);
   StreamSubscription? _orientationSubscription;
   StreamSubscription? _screenOrientSubscription;
@@ -223,10 +223,10 @@ class PanoramaState extends State<PanoramaViewer>
     // auto rotate
     longitudeDelta += 0.001 * widget.animSpeed;
     // animate vertical rotating
-    latitudeRad += latitudeDelta * _dampingFactor * widget.sensitivity;
+    latitude += latitudeDelta * _dampingFactor * widget.sensitivity;
     latitudeDelta *= 1 - _dampingFactor * widget.sensitivity;
     // animate horizontal rotating
-    longitudeRad += _animateDirection *
+    longitude += _animateDirection *
         longitudeDelta *
         _dampingFactor *
         widget.sensitivity;
@@ -245,7 +245,7 @@ class PanoramaState extends State<PanoramaViewer>
     }
 
     // rotate for screen orientation
-    Quaternion q = Quaternion.axisAngle(Vector3(0, 0, 1), screenOrientationRad);
+    Quaternion q = Quaternion.axisAngle(Vector3(0, 0, 1), screenOrientation);
     // rotate for device orientation
     q *= Quaternion.euler(-orientation.z, -orientation.y, -orientation.x);
     // rotate to latitude zero
@@ -259,11 +259,11 @@ class PanoramaState extends State<PanoramaViewer>
     final double maxLon = radians(widget.maxLongitude);
     final double lat = (-o.y).clamp(minLat, maxLat);
     final double lon = o.x.clamp(minLon, maxLon);
-    if (lat + latitudeRad < minLat) latitudeRad = minLat - lat;
-    if (lat + latitudeRad > maxLat) latitudeRad = maxLat - lat;
+    if (lat + latitude < minLat) latitude = minLat - lat;
+    if (lat + latitude > maxLat) latitude = maxLat - lat;
     if (maxLon - minLon < math.pi * 2) {
-      if (lon + longitudeRad < minLon || lon + longitudeRad > maxLon) {
-        longitudeRad = (lon + longitudeRad < minLon ? minLon : maxLon) - lon;
+      if (lon + longitude < minLon || lon + longitude > maxLon) {
+        longitude = (lon + longitude < minLon ? minLon : maxLon) - lon;
         // reverse rotation when reaching the boundary
         if (widget.animSpeed != 0) {
           if (widget.animReverse)
@@ -280,9 +280,9 @@ class PanoramaState extends State<PanoramaViewer>
     // rotate to longitude zero
     q *= Quaternion.axisAngle(Vector3(0, 1, 0), -math.pi * 0.5);
     // rotate around the global Y axis
-    q *= Quaternion.axisAngle(Vector3(0, 1, 0), longitudeRad);
+    q *= Quaternion.axisAngle(Vector3(0, 1, 0), longitude);
     // rotate around the local X axis
-    q = Quaternion.axisAngle(Vector3(1, 0, 0), -latitudeRad) * q;
+    q = Quaternion.axisAngle(Vector3(1, 0, 0), -latitude) * q;
 
     o = quaternionToOrientation(
         q * Quaternion.axisAngle(Vector3(0, 1, 0), math.pi * 0.5));
@@ -321,7 +321,7 @@ class PanoramaState extends State<PanoramaViewer>
     if (widget.sensorControl != SensorControl.none) {
       _screenOrientSubscription = motionSensors.screenOrientation
           .listen((ScreenOrientationEvent event) {
-        screenOrientationRad = radians(event.angle!);
+        screenOrientation = radians(event.angle!);
       });
     }
   }
@@ -437,8 +437,8 @@ class PanoramaState extends State<PanoramaViewer>
   @override
   void initState() {
     super.initState();
-    latitudeRad = radians(widget.latitude);
-    longitudeRad = radians(widget.longitude);
+    latitude = degrees(widget.latitude);
+    longitude = degrees(widget.longitude);
     _streamController = StreamController<Null>.broadcast();
     _stream = _streamController.stream;
 
@@ -495,8 +495,9 @@ class PanoramaState extends State<PanoramaViewer>
 
   void setView(double newLatitude, double newLongitude) {
     setState(() {
-      latitudeRad = radians(newLatitude);
-      longitudeRad = radians(newLongitude);
+      latitude = newLatitude; // Reset latitude to initial value
+      longitude = newLongitude; // Reset longitude to initial value
+      // Reset any other properties as needed, such as tilt if implemented
     });
   }
 

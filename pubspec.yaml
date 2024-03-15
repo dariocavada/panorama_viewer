@@ -1,7 +1,7 @@
 name: panorama_viewer
 description: Panorama Viewer - A 360-degree panorama viewer.
 # pub.dev using `flutter pub publish`.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/dariocavada/panorama_viewer
 
 environment:
@@ -17,6 +17,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 flutter:

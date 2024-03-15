@@ -1,3 +1,10 @@
+
+## 1.0.3
+* separate examples. simple, simple with transparent app bar, full, and one with external controls
+* added two new methods to control zoom and position with external buttons and slided. Added also an example on how to use
+* solve the Longitude and latitude initialization #2 (porting from PRs in original repo)
+
+
 ## 1.0.2
 
 * bug fixing for iOS, updated dependencies (dchs_motion_sensors 1.0.2) 
