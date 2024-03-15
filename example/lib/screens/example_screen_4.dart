@@ -94,14 +94,14 @@ class ExampleScreen4State extends State<ExampleScreen4> {
                   heroTag: "zoomInBtn",
                   onPressed: _zoomIn,
                   tooltip: 'Zoom In',
-                  child: Icon(Icons.zoom_in),
+                  child: const Icon(Icons.zoom_in),
                 ),
-                SizedBox(height: 10), // Space between buttons
+                const SizedBox(height: 10), // Space between buttons
                 FloatingActionButton(
                   heroTag: "zoomOutBtn",
                   onPressed: _zoomOut,
                   tooltip: 'Zoom Out',
-                  child: Icon(Icons.zoom_out),
+                  child: const Icon(Icons.zoom_out),
                 ),
               ],
             ),
