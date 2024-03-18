@@ -1,6 +1,7 @@
 library panorama_viewer;
 
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ enum SensorControl {
 
 class PanoramaViewer extends StatefulWidget {
   const PanoramaViewer({
-    Key? key,
+    super.key,
     this.latitude = 0,
     this.longitude = 0,
     this.zoom = 1.0,
@@ -48,7 +49,7 @@ class PanoramaViewer extends StatefulWidget {
     this.onImageLoad,
     this.child,
     this.hotspots,
-  }) : super(key: key);
+  });
 
   /// The initial latitude, in degrees, between -90 and 90. default to 0 (the vertical center of the image).
   final double latitude;
@@ -152,6 +153,7 @@ class PanoramaState extends State<PanoramaViewer>
   double _radius = 500;
   double _dampingFactor = 0.05;
   double _animateDirection = 1.0;
+  double _animSpeed = 0.0;
   late AnimationController _controller;
   double screenOrientationRad = 0.0;
   Vector3 orientation = Vector3(0, radians(90), 0);
@@ -204,24 +206,23 @@ class PanoramaState extends State<PanoramaViewer>
         math.pi *
         offset.dx /
         scene!.camera.viewportHeight;
-    if (_lastZoom == null) {
-      _lastZoom = scene!.camera.zoom;
-    }
+    _lastZoom ??= scene!.camera.zoom;
     zoomDelta += _lastZoom! * details.scale - (scene!.camera.zoom + zoomDelta);
     if (widget.sensorControl == SensorControl.none &&
         !_controller.isAnimating) {
       _controller.reset();
-      if (widget.animSpeed != 0) {
+      if (_animSpeed != 0) {
         _controller.repeat();
-      } else
+      } else {
         _controller.forward();
+      }
     }
   }
 
   void _updateView() {
     if (scene == null) return;
     // auto rotate
-    longitudeDelta += 0.001 * widget.animSpeed;
+    longitudeDelta += 0.001 * _animSpeed;
     // animate vertical rotating
     latitudeRad += latitudeDelta * _dampingFactor * widget.sensitivity;
     latitudeDelta *= 1 - _dampingFactor * widget.sensitivity;
@@ -240,7 +241,7 @@ class PanoramaState extends State<PanoramaViewer>
         longitudeDelta.abs() < 0.001 &&
         zoomDelta.abs() < 0.001) {
       if (widget.sensorControl == SensorControl.none &&
-          widget.animSpeed == 0 &&
+          _animSpeed == 0 &&
           _controller.isAnimating) _controller.stop();
     }
 
@@ -265,11 +266,12 @@ class PanoramaState extends State<PanoramaViewer>
       if (lon + longitudeRad < minLon || lon + longitudeRad > maxLon) {
         longitudeRad = (lon + longitudeRad < minLon ? minLon : maxLon) - lon;
         // reverse rotation when reaching the boundary
-        if (widget.animSpeed != 0) {
-          if (widget.animReverse)
+        if (_animSpeed != 0) {
+          if (widget.animReverse) {
             _animateDirection *= -1.0;
-          else
+          } else {
             _controller.stop();
+          }
         }
       }
     }
@@ -338,7 +340,7 @@ class PanoramaState extends State<PanoramaViewer>
   void _loadTexture(ImageProvider? provider) {
     if (provider == null) return;
     _imageStream?.removeListener(ImageStreamListener(_updateTexture));
-    _imageStream = provider.resolve(ImageConfiguration());
+    _imageStream = provider.resolve(const ImageConfiguration());
     ImageStreamListener listener = ImageStreamListener(_updateTexture);
     _imageStream!.addListener(listener);
   }
@@ -439,16 +441,19 @@ class PanoramaState extends State<PanoramaViewer>
     super.initState();
     latitudeRad = radians(widget.latitude);
     longitudeRad = radians(widget.longitude);
+
+    _animSpeed = widget.animSpeed;
     _streamController = StreamController<Null>.broadcast();
     _stream = _streamController.stream;
 
     _updateSensorControl();
 
     _controller = AnimationController(
-        duration: Duration(milliseconds: 60000), vsync: this)
+        duration: const Duration(milliseconds: 60000), vsync: this)
       ..addListener(_updateView);
-    if (widget.sensorControl != SensorControl.none || widget.animSpeed != 0)
+    if (widget.sensorControl != SensorControl.none || _animSpeed != 0) {
       _controller.repeat();
+    }
   }
 
   @override
@@ -489,14 +494,42 @@ class PanoramaState extends State<PanoramaViewer>
   // Add the setZoom method here
   void setZoom(double zoomLevel) {
     setState(() {
-      scene!.camera.zoom = zoomLevel.clamp(widget.minZoom, widget.maxZoom);
+      zoomDelta = zoomLevel - scene!.camera.zoom;
+      if (!_controller.isAnimating) {
+        _controller.reset();
+        _controller.repeat();
+      }
+      _updateView();
     });
   }
 
   void setView(double newLatitude, double newLongitude) {
     setState(() {
-      latitudeRad = radians(newLatitude);
-      longitudeRad = radians(newLongitude);
+      longitudeRad = longitudeRad % (2 * pi);
+      latitudeRad = max(min(latitudeRad, pi / 2), -pi / 2);
+
+      double newLongitudeRad = radians(newLongitude) % (2 * pi);
+      double newLatitudeRad = max(min(radians(newLatitude), pi / 2), -pi / 2);
+
+      latitudeDelta = ((newLatitudeRad - latitudeRad) + pi) % (2 * pi) - pi;
+      longitudeDelta = ((newLongitudeRad - longitudeRad) + pi) % (2 * pi) - pi;
+
+      if (!_controller.isAnimating) {
+        _controller.reset();
+        _controller.repeat();
+      }
+      _updateView();
+    });
+  }
+
+  void setAnimSpeed(double newSpeed) {
+    setState(() {
+      _animSpeed = newSpeed;
+      if (!_controller.isAnimating) {
+        _controller.reset();
+        _controller.repeat();
+      }
+      _updateView();
     });
   }
 

@@ -1,3 +1,6 @@
+## 1.0.4
+* updates to make the movement smooth thank you to @Henk-Keijzer 
+* added setAnimSpeed(double newSpeed) thank you to @Henk-Keijzer 
 
 ## 1.0.3
 * separate examples. simple, simple with transparent app bar, full, and one with external controls

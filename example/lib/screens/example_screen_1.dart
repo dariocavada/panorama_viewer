@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:panorama_viewer/panorama_viewer.dart';
 
 class ExampleScreen1 extends StatefulWidget {
-  const ExampleScreen1({Key? key, required this.title}) : super(key: key);
+  const ExampleScreen1({super.key, required this.title});
   final String title;
   @override
   ExampleScreen1State createState() => ExampleScreen1State();

@@ -1,9 +1,8 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:panorama_viewer/panorama_viewer.dart';
 
 class ExampleScreen4 extends StatefulWidget {
-  const ExampleScreen4({Key? key, required this.title}) : super(key: key);
+  const ExampleScreen4({super.key, required this.title});
   final String title;
   @override
   ExampleScreen4State createState() => ExampleScreen4State();
