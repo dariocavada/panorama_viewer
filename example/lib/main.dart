@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:example/screens/example_screen_5.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/example_screen_1.dart';
@@ -80,6 +81,19 @@ class MainScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => const ExampleScreen4(
                     title: 'Zoom and position with buttons',
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Example 5 - 2 panoramas side by side'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ExampleScreen5(
+                    title: '2 panoramas side by side',
                   ),
                 ),
               );
