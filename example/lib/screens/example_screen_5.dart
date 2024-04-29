@@ -25,17 +25,23 @@ class ExampleScreen5State extends State<ExampleScreen5> {
           SizedBox(
             width: screenWidth / 2,
             height: screenHeight,
-            child: PanoramaViewer(
-              key: panoAKey,
-              child: Image.asset('assets/panorama1.webp'),
+            child: ClipRect(
+              child: PanoramaViewer(
+                //sensorControl: SensorControl.orientation,
+                key: panoAKey,
+                child: Image.asset('assets/panorama1.webp'),
+              ),
             ),
           ),
           SizedBox(
             width: screenWidth / 2,
             height: screenHeight,
-            child: PanoramaViewer(
-              key: panoBKey,
-              child: Image.asset('assets/panorama2.webp'),
+            child: ClipRect(
+              child: PanoramaViewer(
+                //sensorControl: SensorControl.orientation,
+                key: panoBKey,
+                child: Image.asset('assets/panorama2.webp'),
+              ),
             ),
           ),
         ],
