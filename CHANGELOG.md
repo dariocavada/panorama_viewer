@@ -1,3 +1,7 @@
+## 1.0.5
+* updated dchs_motion_sensors to 1.1.0
+* updated examples
+
 ## 1.0.4
 * updates to make the movement smooth thank you to @Henk-Keijzer 
 * added setAnimSpeed(double newSpeed) thank you to @Henk-Keijzer 
