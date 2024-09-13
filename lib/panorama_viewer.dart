@@ -333,7 +333,7 @@ class PanoramaState extends State<PanoramaViewer>
     surface?.mesh.textureRect = Rect.fromLTWH(0, 0,
         imageInfo.image.width.toDouble(), imageInfo.image.height.toDouble());
     scene!.texture = imageInfo.image;
-    scene!.update();
+    scene!.updateTexture();
     widget.onImageLoad?.call();
   }
 
