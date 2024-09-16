@@ -1,3 +1,6 @@
+## 1.0.6
+* Fixed an issue where re-rendering the Panorama resulted in a blank screen. Thanks to @ewanAtPropertyMe for the fix.
+
 ## 1.0.5
 * updated dchs_motion_sensors to 1.1.0
 * updated examples
