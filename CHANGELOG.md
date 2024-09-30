@@ -1,3 +1,10 @@
+## 2.0.0
+* update dchs-motion sensor to 2.0.0
+* update sdk environment to 3.5.*
+* update flutter_lints to 5.0.0
+* change build gradle for recommended plugin usage
+* update gradle to 8.3
+
 ## 1.0.6
 * Fixed an issue where re-rendering the Panorama resulted in a blank screen. Thanks to @ewanAtPropertyMe for the fix.
 
