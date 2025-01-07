@@ -1,6 +1,9 @@
+## 2.0.2
+* Reintroduced sensor controls for iOS and Android.
+
 ## 2.0.1
-* added first web support without sensors (dchs_motion_sensors are not web implementation)
-* works very well on mac, windows, iOS. On some Android Devices there are WebGL errors if the panorama image is too large
+* Added initial web support without sensors (since dchs_motion_sensors is not implemented for the web).
+* Works well on macOS, Windows, and iOS. However, on some Android devices, WebGL errors may occur if the panorama image is too large.
 
 ## 2.0.0
 * update dchs-motion sensor to 2.0.0
