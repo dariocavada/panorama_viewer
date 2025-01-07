@@ -449,7 +449,7 @@ class PanoramaState extends State<PanoramaViewer>
     _streamController = StreamController<Null>.broadcast();
     _stream = _streamController.stream;
 
-    // TEST _updateSensorControl();
+    _updateSensorControl();
 
     _controller = AnimationController(
         duration: const Duration(milliseconds: 60000), vsync: this)
@@ -490,7 +490,7 @@ class PanoramaState extends State<PanoramaViewer>
       _loadTexture(widget.child?.image);
     }
     if (widget.sensorControl != oldWidget.sensorControl) {
-      // TEST _updateSensorControl();
+      _updateSensorControl();
     }
   }
 
