@@ -10,7 +10,7 @@ Add panorama as a dependency in your pubspec.yaml file.
 
 ```yaml
 dependencies:
-  panorama_viewer: ^1.0.3
+  panorama_viewer: ^2.0.1
 ```
 
 Import and add the Panorama Viewer widget to your project.
@@ -38,9 +38,10 @@ import 'package:panorama_viewer/panorama_viewer.dart';
 - Change the widget name from `Panorama` to `PanoramaViewer`.
 - If you've used `SensorControl`, change `SensorControl.Orientation` to `SensorControl.orientation`. All constant names are now in lower camel case, following the latest Dart best practices.
 
-## Build for web
+## Web implementation
 
-flutter build web --base-href /flutter/panorama_viewer/     
+On the web, sensors are not utilized because the sensor library used is only compatible with iOS and Android devices. Additionally, on some Android devices, if the panoramic image is too large, nothing is displayed. When checking the console log remotely, you may encounter WebGL errors or warnings.
+
 
 
 
