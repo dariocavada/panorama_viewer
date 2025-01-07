@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart';
 import 'package:dchs_motion_sensors/dchs_motion_sensors.dart';
@@ -297,6 +298,8 @@ class PanoramaState extends State<PanoramaViewer>
   }
 
   void _updateSensorControl() {
+    if (kIsWeb) return;
+
     _orientationSubscription?.cancel();
 
     switch (widget.sensorControl) {
@@ -446,7 +449,7 @@ class PanoramaState extends State<PanoramaViewer>
     _streamController = StreamController<Null>.broadcast();
     _stream = _streamController.stream;
 
-    _updateSensorControl();
+    // TEST _updateSensorControl();
 
     _controller = AnimationController(
         duration: const Duration(milliseconds: 60000), vsync: this)
@@ -487,7 +490,7 @@ class PanoramaState extends State<PanoramaViewer>
       _loadTexture(widget.child?.image);
     }
     if (widget.sensorControl != oldWidget.sensorControl) {
-      _updateSensorControl();
+      // TEST _updateSensorControl();
     }
   }
 

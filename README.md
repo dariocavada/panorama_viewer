@@ -38,9 +38,9 @@ import 'package:panorama_viewer/panorama_viewer.dart';
 - Change the widget name from `Panorama` to `PanoramaViewer`.
 - If you've used `SensorControl`, change `SensorControl.Orientation` to `SensorControl.orientation`. All constant names are now in lower camel case, following the latest Dart best practices.
 
+## Build for web
 
-
-
+flutter build web --base-href /flutter/panorama_viewer/     
 
 
 

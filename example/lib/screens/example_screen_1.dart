@@ -17,8 +17,9 @@ class ExampleScreen1State extends State<ExampleScreen1> {
       ),
       body: PanoramaViewer(
         animSpeed: .1,
-        sensorControl: SensorControl.orientation,
-        child: Image.asset('assets/panorama1.webp'),
+        //sensorControl: SensorControl.orientation,
+        //child: Image.asset('assets/panorama1.webp'),
+        child: Image.asset('assets/panorama1-rid.jpg'),
       ),
     );
   }
