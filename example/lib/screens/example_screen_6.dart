@@ -163,10 +163,15 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
             child: PanoramaViewer(
               filterConfiguration: configuration,
               child: Image.asset('assets/panorama1-rid.jpg'),
+              onFilteredImageChanged: (filteredImage) {
+                debugPrint('Filtered image: $filteredImage');
+                // Here you get the filtered image whenever it changes
+                // You can store it, process it further, etc.
+              },
             ),
           ),
           Container(
-            color: Theme.of(context).primaryColor.withOpacity(0.1),
+            color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -222,7 +227,7 @@ class FilterButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: isSelected
             ? Theme.of(context).primaryColor
-            : Theme.of(context).primaryColor.withOpacity(0.3),
+            : Theme.of(context).primaryColor.withValues(alpha: 0.3),
       ),
       onPressed: onTap,
       child: Text(label),

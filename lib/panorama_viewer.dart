@@ -52,6 +52,7 @@ class PanoramaViewer extends StatefulWidget {
     this.child,
     this.hotspots,
     this.filterConfiguration,
+    this.onFilteredImageChanged,
   });
 
   /// The initial latitude, in degrees, between -90 and 90. default to 0 (the vertical center of the image).
@@ -140,6 +141,9 @@ class PanoramaViewer extends StatefulWidget {
 
   /// Optional filter configuration to apply to the panorama image
   final filters.ShaderConfiguration? filterConfiguration;
+
+  /// Callback when filtered image changes
+  final Function(ui.Image)? onFilteredImageChanged;
 
   @override
   PanoramaState createState() => PanoramaState();
@@ -360,11 +364,9 @@ class PanoramaState extends State<PanoramaViewer>
   void _updateTexture(ImageInfo imageInfo, bool synchronousCall) async {
     try {
       if (widget.filterConfiguration != null) {
-        // Process the image with filters
         final newTexture = await _applyFilters(imageInfo.image);
         if (newTexture == null || !mounted) return;
 
-        // Update the texture synchronously to avoid GL context issues
         surface?.mesh.texture = newTexture;
         surface?.mesh.textureRect = Rect.fromLTWH(
           0,
@@ -374,7 +376,9 @@ class PanoramaState extends State<PanoramaViewer>
         );
         scene?.texture = newTexture;
 
-        // Ensure proper cleanup
+        // Notify about the new filtered image
+        widget.onFilteredImageChanged?.call(newTexture);
+
         if (_processedImage != null && _processedImage != newTexture) {
           final oldTexture = _processedImage;
           WidgetsBinding.instance.addPostFrameCallback((_) {
