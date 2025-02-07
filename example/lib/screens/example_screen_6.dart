@@ -162,6 +162,7 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
           Expanded(
             child: PanoramaViewer(
               filterConfiguration: configuration,
+              filterDebounceThreshold: 1000,
               child: Image.asset('assets/panorama1-rid.jpg'),
               onFilteredImageChanged: (filteredImage) {
                 debugPrint('Filtered image: $filteredImage');
