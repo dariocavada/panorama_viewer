@@ -7,6 +7,7 @@ import 'screens/example_screen_1.dart';
 import 'screens/example_screen_2.dart';
 import 'screens/example_screen_3.dart';
 import 'screens/example_screen_4.dart';
+import 'screens/example_screen_6.dart';
 
 void main() => runApp(const MyApp());
 
@@ -94,6 +95,19 @@ class MainScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => const ExampleScreen5(
                     title: '2 panoramas side by side',
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Example 6 - With Image Filters'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ExampleScreen6(
+                    title: 'Image Filters',
                   ),
                 ),
               );

@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart';
 import 'package:dchs_motion_sensors/dchs_motion_sensors.dart';
+import 'package:flutter_image_filters/flutter_image_filters.dart' as filters;
 
 enum SensorControl {
   /// No sensor used.
@@ -50,6 +51,7 @@ class PanoramaViewer extends StatefulWidget {
     this.onImageLoad,
     this.child,
     this.hotspots,
+    this.filterConfiguration,
   });
 
   /// The initial latitude, in degrees, between -90 and 90. default to 0 (the vertical center of the image).
@@ -136,6 +138,9 @@ class PanoramaViewer extends StatefulWidget {
   /// Place widgets in the panorama.
   final List<Hotspot>? hotspots;
 
+  /// Optional filter configuration to apply to the panorama image
+  final filters.ShaderConfiguration? filterConfiguration;
+
   @override
   PanoramaState createState() => PanoramaState();
 }
@@ -163,6 +168,7 @@ class PanoramaState extends State<PanoramaViewer>
   late StreamController<Null> _streamController;
   Stream<Null>? _stream;
   ImageStream? _imageStream;
+  ui.Image? _processedImage;
 
   void _handleTapUp(TapUpDetails details) {
     final Vector3 o =
@@ -331,13 +337,55 @@ class PanoramaState extends State<PanoramaViewer>
     }
   }
 
-  void _updateTexture(ImageInfo imageInfo, bool synchronousCall) {
-    surface?.mesh.texture = imageInfo.image;
-    surface?.mesh.textureRect = Rect.fromLTWH(0, 0,
-        imageInfo.image.width.toDouble(), imageInfo.image.height.toDouble());
-    scene!.texture = imageInfo.image;
-    scene!.updateTexture();
-    widget.onImageLoad?.call();
+  Future<ui.Image?> _applyFilters(ui.Image originalImage) async {
+    if (widget.filterConfiguration == null) return originalImage;
+
+    try {
+      // Create a TextureSource from the original image
+      final textureSource = filters.TextureSource.fromImage(originalImage);
+
+      // Apply the filters and get the processed image
+      final processedImage = await widget.filterConfiguration!.export(
+          textureSource,
+          Size(
+              originalImage.width.toDouble(), originalImage.height.toDouble()));
+
+      return processedImage;
+    } catch (e) {
+      debugPrint('Error applying filters: $e');
+      return originalImage;
+    }
+  }
+
+  void _updateTexture(ImageInfo imageInfo, bool synchronousCall) async {
+    try {
+      ui.Image textureImage;
+      if (widget.filterConfiguration != null) {
+        _processedImage?.dispose(); // Clean up previous processed image
+        _processedImage = await _applyFilters(imageInfo.image);
+        textureImage = _processedImage!;
+      } else {
+        textureImage = imageInfo.image;
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        surface?.mesh.texture = textureImage;
+        surface?.mesh.textureRect = Rect.fromLTWH(
+          0,
+          0,
+          textureImage.width.toDouble(),
+          textureImage.height.toDouble(),
+        );
+        scene?.texture = textureImage;
+        scene?.updateTexture();
+      });
+
+      widget.onImageLoad?.call();
+    } catch (e) {
+      debugPrint('Error updating texture: $e');
+    }
   }
 
   void _loadTexture(ImageProvider? provider) {
@@ -461,6 +509,7 @@ class PanoramaState extends State<PanoramaViewer>
 
   @override
   void dispose() {
+    _processedImage?.dispose();
     _imageStream?.removeListener(ImageStreamListener(_updateTexture));
     _orientationSubscription?.cancel();
     _screenOrientSubscription?.cancel();
@@ -491,6 +540,9 @@ class PanoramaState extends State<PanoramaViewer>
     }
     if (widget.sensorControl != oldWidget.sensorControl) {
       _updateSensorControl();
+    }
+    if (widget.filterConfiguration != oldWidget.filterConfiguration) {
+      _loadTexture(widget.child?.image);
     }
   }
 
