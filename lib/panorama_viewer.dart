@@ -359,28 +359,42 @@ class PanoramaState extends State<PanoramaViewer>
 
   void _updateTexture(ImageInfo imageInfo, bool synchronousCall) async {
     try {
-      ui.Image textureImage;
       if (widget.filterConfiguration != null) {
-        _processedImage?.dispose(); // Clean up previous processed image
-        _processedImage = await _applyFilters(imageInfo.image);
-        textureImage = _processedImage!;
-      } else {
-        textureImage = imageInfo.image;
-      }
+        // Process the image with filters
+        final newTexture = await _applyFilters(imageInfo.image);
+        if (newTexture == null || !mounted) return;
 
-      if (!mounted) return;
-
-      setState(() {
-        surface?.mesh.texture = textureImage;
+        // Update the texture synchronously to avoid GL context issues
+        surface?.mesh.texture = newTexture;
         surface?.mesh.textureRect = Rect.fromLTWH(
           0,
           0,
-          textureImage.width.toDouble(),
-          textureImage.height.toDouble(),
+          newTexture.width.toDouble(),
+          newTexture.height.toDouble(),
         );
-        scene?.texture = textureImage;
+        scene?.texture = newTexture;
+
+        // Ensure proper cleanup
+        if (_processedImage != null && _processedImage != newTexture) {
+          final oldTexture = _processedImage;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            oldTexture?.dispose();
+          });
+        }
+        _processedImage = newTexture;
         scene?.updateTexture();
-      });
+      } else {
+        // Update with original image
+        surface?.mesh.texture = imageInfo.image;
+        surface?.mesh.textureRect = Rect.fromLTWH(
+          0,
+          0,
+          imageInfo.image.width.toDouble(),
+          imageInfo.image.height.toDouble(),
+        );
+        scene?.texture = imageInfo.image;
+        scene?.updateTexture();
+      }
 
       widget.onImageLoad?.call();
     } catch (e) {
