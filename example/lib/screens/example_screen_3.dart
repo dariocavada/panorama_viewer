@@ -38,9 +38,9 @@ class ExampleScreen2State extends State<ExampleScreen3> {
       children: [
         TextButton(
           style: ButtonStyle(
-            shape: MaterialStateProperty.all(const CircleBorder()),
-            backgroundColor: MaterialStateProperty.all(Colors.black38),
-            foregroundColor: MaterialStateProperty.all(Colors.white),
+            shape: WidgetStateProperty.all(const CircleBorder()),
+            backgroundColor: WidgetStateProperty.all(Colors.black38),
+            foregroundColor: WidgetStateProperty.all(Colors.white),
           ),
           onPressed: onPressed,
           child: Icon(icon),
@@ -68,13 +68,13 @@ class ExampleScreen2State extends State<ExampleScreen3> {
           sensorControl: SensorControl.orientation,
           onViewChanged: onViewChanged,
           onTap: (longitude, latitude, tilt) =>
-              print('onTap: $longitude, $latitude, $tilt'),
+              debugPrint('onTap: $longitude, $latitude, $tilt'),
           onLongPressStart: (longitude, latitude, tilt) =>
-              print('onLongPressStart: $longitude, $latitude, $tilt'),
+              debugPrint('onLongPressStart: $longitude, $latitude, $tilt'),
           onLongPressMoveUpdate: (longitude, latitude, tilt) =>
-              print('onLongPressMoveUpdate: $longitude, $latitude, $tilt'),
+              debugPrint('onLongPressMoveUpdate: $longitude, $latitude, $tilt'),
           onLongPressEnd: (longitude, latitude, tilt) =>
-              print('onLongPressEnd: $longitude, $latitude, $tilt'),
+              debugPrint('onLongPressEnd: $longitude, $latitude, $tilt'),
           hotspots: [
             Hotspot(
               latitude: -15.0,

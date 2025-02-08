@@ -1,5 +1,3 @@
-library panorama_viewer;
-
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
@@ -166,8 +164,8 @@ class PanoramaState extends State<PanoramaViewer>
   double zoomDelta = 0;
   late Offset _lastFocalPoint;
   double? _lastZoom;
-  double _radius = 500;
-  double _dampingFactor = 0.05;
+  final double _radius = 500;
+  final double _dampingFactor = 0.05;
   double _animateDirection = 1.0;
   double _animSpeed = 0.0;
   late AnimationController _controller;
@@ -268,7 +266,9 @@ class PanoramaState extends State<PanoramaViewer>
         zoomDelta.abs() < 0.001) {
       if (widget.sensorControl == SensorControl.none &&
           _animSpeed == 0 &&
-          _controller.isAnimating) _controller.stop();
+          _controller.isAnimating) {
+        _controller.stop();
+      }
     }
 
     // rotate for screen orientation
@@ -389,11 +389,6 @@ class PanoramaState extends State<PanoramaViewer>
             if (!mounted) return;
 
             _isProcessingTexture = true;
-
-            // Always process the latest configuration
-            final configToProcess =
-                _pendingConfiguration ?? widget.filterConfiguration;
-            _pendingConfiguration = null;
 
             final newTexture = await _applyFilters(_lastImageInfo!.image);
             if (newTexture == null || !mounted) {

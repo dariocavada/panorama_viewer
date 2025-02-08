@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:example/filter-configurations/invert_filter_configuration.dart';
 import 'package:example/filter-configurations/sepia_filter_configuration.dart';
 import 'package:example/filter-configurations/sharpen_filter_configuration.dart';
@@ -325,10 +323,10 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .scaffoldBackgroundColor
-                      .withOpacity(0.9),
+                      .withValues(alpha: 0.9),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 10,
                       offset: const Offset(0, -2),
                     ),
@@ -466,7 +464,7 @@ class FilterButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: isSelected
             ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.surface.withOpacity(0.3),
+            : Theme.of(context).colorScheme.surface.withValues(alpha: 0.3),
         foregroundColor: isSelected
             ? Theme.of(context).colorScheme.onPrimary
             : Theme.of(context).colorScheme.onSurface,
