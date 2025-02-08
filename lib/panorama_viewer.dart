@@ -182,12 +182,10 @@ class PanoramaState extends State<PanoramaViewer>
   Timer? _textureUpdateTimer;
   filters.ShaderConfiguration? _pendingConfiguration;
   bool _isProcessingTexture = false;
+  ImageInfo? _lastImageInfo; // Store for reprocessing
 
   bool _isLargeImage(ui.Image image) {
-    // Disable debouncing if threshold is -1
     if (widget.filterDebounceThreshold < 0) return false;
-
-    // Only check height for panoramic images
     return image.height > widget.filterDebounceThreshold;
   }
 
@@ -376,30 +374,33 @@ class PanoramaState extends State<PanoramaViewer>
   void _updateTexture(ImageInfo imageInfo, bool synchronousCall) async {
     try {
       if (widget.filterConfiguration != null) {
-        // Check if image is large enough to need debouncing
         final bool needsDebouncing = _isLargeImage(imageInfo.image);
+        _lastImageInfo = imageInfo; // Store for reprocessing
 
         if (needsDebouncing) {
-          // If already processing, queue the update
           if (_isProcessingTexture) {
             _pendingConfiguration = widget.filterConfiguration;
             return;
           }
 
-          // Debounce rapid filter changes for large images
           _textureUpdateTimer?.cancel();
           _textureUpdateTimer =
               Timer(const Duration(milliseconds: 16), () async {
             if (!mounted) return;
 
             _isProcessingTexture = true;
-            final newTexture = await _applyFilters(imageInfo.image);
+
+            // Always process the latest configuration
+            final configToProcess =
+                _pendingConfiguration ?? widget.filterConfiguration;
+            _pendingConfiguration = null;
+
+            final newTexture = await _applyFilters(_lastImageInfo!.image);
             if (newTexture == null || !mounted) {
               _isProcessingTexture = false;
               return;
             }
 
-            // Update texture
             surface?.mesh.texture = newTexture;
             surface?.mesh.textureRect = Rect.fromLTWH(
               0,
@@ -409,10 +410,8 @@ class PanoramaState extends State<PanoramaViewer>
             );
             scene?.texture = newTexture;
 
-            // Notify about the new filtered image
             widget.onFilteredImageChanged?.call(newTexture);
 
-            // Clean up old texture
             if (_processedImage != null && _processedImage != newTexture) {
               final oldTexture = _processedImage;
               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -424,11 +423,9 @@ class PanoramaState extends State<PanoramaViewer>
 
             _isProcessingTexture = false;
 
-            // Process any pending updates
-            if (_pendingConfiguration != null &&
-                _pendingConfiguration != widget.filterConfiguration) {
-              _pendingConfiguration = null;
-              _updateTexture(imageInfo, false);
+            // If we got new updates while processing, process the latest one
+            if (_pendingConfiguration != null) {
+              _updateTexture(_lastImageInfo!, false);
             }
           });
         } else {
@@ -444,7 +441,6 @@ class PanoramaState extends State<PanoramaViewer>
             newTexture.height.toDouble(),
           );
           scene?.texture = newTexture;
-
           widget.onFilteredImageChanged?.call(newTexture);
 
           if (_processedImage != null && _processedImage != newTexture) {
@@ -472,6 +468,7 @@ class PanoramaState extends State<PanoramaViewer>
       widget.onImageLoad?.call();
     } catch (e) {
       debugPrint('Error updating texture: $e');
+      _isProcessingTexture = false;
     }
   }
 
@@ -598,6 +595,7 @@ class PanoramaState extends State<PanoramaViewer>
   void dispose() {
     _textureUpdateTimer?.cancel();
     _processedImage?.dispose();
+    _lastImageInfo = null;
     _imageStream?.removeListener(ImageStreamListener(_updateTexture));
     _orientationSubscription?.cancel();
     _screenOrientSubscription?.cancel();
