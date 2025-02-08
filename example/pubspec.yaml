@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_image_filters: ^0.0.25
+  flutter_gpu_filters_interface: ^0.0.18
   cupertino_icons: ^1.0.8
 
   panorama_viewer: 
@@ -28,3 +29,8 @@ flutter:
   assets:
    - assets/
 
+  shaders:
+    - shaders/sharpen.frag
+    - shaders/vibrance.frag
+    - shaders/invert.frag
+    - shaders/sepia.frag

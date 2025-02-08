@@ -1,3 +1,9 @@
+import 'dart:ui';
+
+import 'package:example/filter-configurations/invert_filter_configuration.dart';
+import 'package:example/filter-configurations/sepia_filter_configuration.dart';
+import 'package:example/filter-configurations/sharpen_filter_configuration.dart';
+import 'package:example/filter-configurations/vibrance_filter_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
 import 'package:panorama_viewer/panorama_viewer.dart';
@@ -15,14 +21,28 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
   late BrightnessShaderConfiguration brightnessConfig;
   late ContrastShaderConfiguration contrastConfig;
   late SaturationShaderConfiguration saturationConfig;
+  late HueShaderConfiguration hueConfig;
+  late ExposureShaderConfiguration exposureConfig;
+  late ColorInvertShaderConfiguration colorInvertConfig;
+  late GammaShaderConfiguration gammaConfig;
   late GroupShaderConfiguration configuration;
+  late SharpenFilterConfiguration sharpenConfig;
+  late VibranceFilterConfiguration vibranceConfig;
+  late InvertFilterConfiguration invertConfig;
+  late SepiaFilterConfiguration sepiaConfig;
   String? selectedFilter;
 
   // Default values - these represent no change to the image
   double brightness = 0.0; // 0.0 means no brightness change
   double contrast = 1.0; // 1.0 means original contrast
   double saturation = 1.0; // 1.0 means original saturation
-
+  double hue = 0.0; // 0.0 means no hue change
+  double exposure = 0.0; // 0.0 means no exposure change
+  double gamma = 1.0; // 1.0 means no gamma change
+  double sharpen = 0; // 0.0 means no sharpen change
+  double vibrance = 0; // 0.0 means no vibrance change
+  double invert = 0; // 0.0 means no invert change
+  double sepia = 0; // 0.0 means no sepia change
   @override
   void initState() {
     super.initState();
@@ -33,11 +53,24 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
     brightnessConfig = BrightnessShaderConfiguration()..brightness = brightness;
     contrastConfig = ContrastShaderConfiguration()..contrast = contrast;
     saturationConfig = SaturationShaderConfiguration()..saturation = saturation;
-
+    hueConfig = HueShaderConfiguration()..hueAdjust = hue;
+    exposureConfig = ExposureShaderConfiguration()..exposure = exposure;
+    gammaConfig = GammaShaderConfiguration()..gamma = gamma;
+    sharpenConfig = SharpenFilterConfiguration()..sharpen = sharpen;
+    vibranceConfig = VibranceFilterConfiguration()..vibrance = vibrance;
+    invertConfig = InvertFilterConfiguration()..invert = invert;
+    sepiaConfig = SepiaFilterConfiguration()..sepia = sepia;
     configuration = GroupShaderConfiguration();
     configuration.add(brightnessConfig);
     configuration.add(contrastConfig);
     configuration.add(saturationConfig);
+    configuration.add(hueConfig);
+    configuration.add(exposureConfig);
+    configuration.add(gammaConfig);
+    configuration.add(sharpenConfig);
+    configuration.add(vibranceConfig);
+    configuration.add(invertConfig);
+    configuration.add(sepiaConfig);
   }
 
   void _resetAll() {
@@ -45,6 +78,13 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
       brightness = 0.0; // Reset to neutral brightness
       contrast = 1.0; // Reset to original contrast
       saturation = 1.0; // Reset to original saturation
+      hue = 0.0; // Reset to original hue
+      exposure = 0.0; // Reset to original exposure
+      gamma = 1.0; // Reset to original gamma
+      sharpen = 0.0; // Reset to original sharpen
+      vibrance = 0.0; // Reset to original vibrance
+      invert = 0.0; // Reset to original invert
+      sepia = 0.0; // Reset to original sepia
       _initConfiguration();
     });
   }
@@ -52,6 +92,10 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
   void _resetFilter(String filter) {
     setState(() {
       switch (filter) {
+        case 'sharpen':
+          sharpen = 0; // Reset to neutral sharpen
+          sharpenConfig.sharpen = sharpen;
+          break;
         case 'brightness':
           brightness = 0.0; // Reset to neutral brightness
           brightnessConfig.brightness = brightness;
@@ -64,18 +108,52 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
           saturation = 1.0; // Reset to original saturation
           saturationConfig.saturation = saturation;
           break;
+        case 'hue':
+          hue = 0.0; // Reset to original hue
+          hueConfig.hueAdjust = hue;
+          break;
+        case 'exposure':
+          exposure = 0.0; // Reset to original exposure
+          exposureConfig.exposure = exposure;
+          break;
+        case 'gamma':
+          gamma = 1.0; // Reset to original gamma
+          gammaConfig.gamma = gamma;
+          break;
+        case 'vibrance':
+          vibrance = 0; // Reset to neutral vibrance
+          vibranceConfig.vibrance = vibrance;
+          break;
+        case 'invert':
+          invert = 0; // Reset to neutral invert
+          invertConfig.invert = invert;
+          break;
+        case 'sepia':
+          sepia = 0; // Reset to neutral sepia
+          sepiaConfig.sepia = sepia;
       }
       // Force configuration update
       configuration = GroupShaderConfiguration();
       configuration.add(brightnessConfig);
       configuration.add(contrastConfig);
       configuration.add(saturationConfig);
+      configuration.add(hueConfig);
+      configuration.add(exposureConfig);
+      configuration.add(gammaConfig);
+      configuration.add(sharpenConfig);
+      configuration.add(vibranceConfig);
+      configuration.add(invertConfig);
+      configuration.add(sepiaConfig);
     });
   }
 
   void _updateFilter(String filter, double value) {
     setState(() {
       switch (filter) {
+        case 'sharpen':
+          sharpen = value;
+          sharpenConfig.sharpen = value;
+          break;
         case 'brightness':
           brightness = value;
           brightnessConfig.brightness = value;
@@ -88,12 +166,46 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
           saturation = value;
           saturationConfig.saturation = value;
           break;
+        case 'hue':
+          hue = value;
+          hueConfig.hueAdjust = value;
+          break;
+        case 'exposure':
+          exposure = value;
+          exposureConfig.exposure = value;
+          break;
+        case 'gamma':
+          gamma = value;
+          gammaConfig.gamma = value;
+          break;
+        case 'vibrance':
+          vibrance = value;
+          vibranceConfig.vibrance = value;
+          break;
+        case 'invert':
+          invert = value;
+          invertConfig.invert = value;
+          break;
+        case 'sepia':
+          sepia = value;
+          sepiaConfig.sepia = value;
+          break;
       }
+
+      debugPrint('filter: $filter');
+      debugPrint('value: $value');
       // Force configuration update
       configuration = GroupShaderConfiguration();
+      configuration.add(sharpenConfig);
       configuration.add(brightnessConfig);
       configuration.add(contrastConfig);
       configuration.add(saturationConfig);
+      configuration.add(hueConfig);
+      configuration.add(exposureConfig);
+      configuration.add(gammaConfig);
+      configuration.add(vibranceConfig);
+      configuration.add(invertConfig);
+      configuration.add(sepiaConfig);
     });
   }
 
@@ -105,6 +217,11 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
     double max;
 
     switch (selectedFilter) {
+      case 'sharpen':
+        value = sharpen;
+        min = 0;
+        max = 5.0;
+        break;
       case 'brightness':
         value = brightness;
         min = -1.0;
@@ -119,6 +236,36 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
         value = saturation;
         min = 0.0;
         max = 2.0;
+        break;
+      case 'hue':
+        value = hue;
+        min = 0;
+        max = 360;
+        break;
+      case 'exposure':
+        value = exposure;
+        min = -10;
+        max = 10;
+        break;
+      case 'gamma':
+        value = gamma;
+        min = 0.0;
+        max = 3.0;
+        break;
+      case 'vibrance':
+        value = vibrance;
+        min = 0.0;
+        max = 1.0;
+        break;
+      case 'invert':
+        value = invert;
+        min = 0.0;
+        max = 1.0;
+        break;
+      case 'sepia':
+        value = sepia;
+        min = 0.0;
+        max = 1.0;
         break;
       default:
         return const SizedBox.shrink();
@@ -162,7 +309,6 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
           Expanded(
             child: PanoramaViewer(
               filterConfiguration: configuration,
-              filterDebounceThreshold: 1000,
               child: Image.asset('assets/panorama1-rid.jpg'),
               onFilteredImageChanged: (filteredImage) {
                 debugPrint('Filtered image: $filteredImage');
@@ -182,6 +328,12 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     FilterButton(
+                      label: 'Sharpen',
+                      isSelected: selectedFilter == 'sharpen',
+                      onTap: () => setState(() => selectedFilter =
+                          selectedFilter == 'sharpen' ? null : 'sharpen'),
+                    ),
+                    FilterButton(
                       label: 'Brightness',
                       isSelected: selectedFilter == 'brightness',
                       onTap: () => setState(() => selectedFilter =
@@ -198,6 +350,42 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
                       isSelected: selectedFilter == 'saturation',
                       onTap: () => setState(() => selectedFilter =
                           selectedFilter == 'saturation' ? null : 'saturation'),
+                    ),
+                    FilterButton(
+                      label: 'Hue',
+                      isSelected: selectedFilter == 'hue',
+                      onTap: () => setState(() => selectedFilter =
+                          selectedFilter == 'hue' ? null : 'hue'),
+                    ),
+                    FilterButton(
+                      label: 'Exposure',
+                      isSelected: selectedFilter == 'exposure',
+                      onTap: () => setState(() => selectedFilter =
+                          selectedFilter == 'exposure' ? null : 'exposure'),
+                    ),
+                    FilterButton(
+                      label: 'Gamma',
+                      isSelected: selectedFilter == 'gamma',
+                      onTap: () => setState(() => selectedFilter =
+                          selectedFilter == 'gamma' ? null : 'gamma'),
+                    ),
+                    FilterButton(
+                      label: 'Vibrance',
+                      isSelected: selectedFilter == 'vibrance',
+                      onTap: () => setState(() => selectedFilter =
+                          selectedFilter == 'vibrance' ? null : 'vibrance'),
+                    ),
+                    FilterButton(
+                      label: 'Invert',
+                      isSelected: selectedFilter == 'invert',
+                      onTap: () => setState(() => selectedFilter =
+                          selectedFilter == 'invert' ? null : 'invert'),
+                    ),
+                    FilterButton(
+                      label: 'Sepia',
+                      isSelected: selectedFilter == 'sepia',
+                      onTap: () => setState(() => selectedFilter =
+                          selectedFilter == 'sepia' ? null : 'sepia'),
                     ),
                   ],
                 ),
