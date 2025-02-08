@@ -31,6 +31,29 @@ import 'package:panorama_viewer/panorama_viewer.dart';
   }
 ```
 
+## Image Filters
+
+To apply image filters to the panorama image, use the package `flutter_image_filters`.
+For more information about the package, check out the [flutter_image_filters](https://github.com/zesage/flutter_image_filters) repository.
+
+### Installation
+
+Add the package to your pubspec.yaml file.
+```yaml
+dependencies:
+  flutter_image_filters: ^0.1.0
+```
+
+### Example 6
+
+Check out the example 6 in the example folder to see how to create an image editor with image filters.
+
+### Example 7
+
+Check out the example 7 in the example folder to see how to apply image filters to the panorama image.
+
+
+
 ## Migration from the Panorama package
 
 - In the dependencies, use `panorama_viewer` instead of `panorama`.

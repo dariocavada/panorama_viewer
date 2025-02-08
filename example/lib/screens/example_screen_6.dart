@@ -304,136 +304,145 @@ class _ExampleScreen6State extends State<ExampleScreen6> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          // Panorama takes full screen
-          PanoramaViewer(
-            filterConfiguration: configuration,
-            child: Image.asset('assets/panorama1-rid.jpg'),
-            onFilteredImageChanged: (filteredImage) {
-              debugPrint('Filtered image: $filteredImage');
-            },
-          ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Panorama takes full screen
+            PanoramaViewer(
+              filterConfiguration: configuration,
+              child: Image.asset('assets/panorama1-rid.jpg'),
+              onFilteredImageChanged: (filteredImage) {
+                debugPrint('Filtered image: $filteredImage');
+              },
+            ),
 
-          // Controls overlay at bottom
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color:
-                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, -2),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Slider appears above buttons when filter selected
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    height: selectedFilter != null ? 50 : 0,
-                    child: SingleChildScrollView(
-                      child: _buildFilterControl(),
+            // Controls overlay at bottom
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .scaffoldBackgroundColor
+                      .withOpacity(0.9),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
                     ),
-                  ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Slider appears above buttons when filter selected
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: selectedFilter != null ? 50 : 0,
+                      child: SingleChildScrollView(
+                        child: _buildFilterControl(),
+                      ),
+                    ),
 
-                  // Scrollable buttons row
-                  SizedBox(
-                    height: 50,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      physics: const BouncingScrollPhysics(),
-                      children: [
-                        FilterButton(
-                          label: 'Sharpen',
-                          isSelected: selectedFilter == 'sharpen',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'sharpen' ? null : 'sharpen'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Brightness',
-                          isSelected: selectedFilter == 'brightness',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'brightness'
-                                  ? null
-                                  : 'brightness'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Contrast',
-                          isSelected: selectedFilter == 'contrast',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'contrast' ? null : 'contrast'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Saturation',
-                          isSelected: selectedFilter == 'saturation',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'saturation'
-                                  ? null
-                                  : 'saturation'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Hue',
-                          isSelected: selectedFilter == 'hue',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'hue' ? null : 'hue'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Exposure',
-                          isSelected: selectedFilter == 'exposure',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'exposure' ? null : 'exposure'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Gamma',
-                          isSelected: selectedFilter == 'gamma',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'gamma' ? null : 'gamma'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Vibrance',
-                          isSelected: selectedFilter == 'vibrance',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'vibrance' ? null : 'vibrance'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Invert',
-                          isSelected: selectedFilter == 'invert',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'invert' ? null : 'invert'),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          label: 'Sepia',
-                          isSelected: selectedFilter == 'sepia',
-                          onTap: () => setState(() => selectedFilter =
-                              selectedFilter == 'sepia' ? null : 'sepia'),
-                        ),
-                      ],
+                    // Scrollable buttons row
+                    SizedBox(
+                      height: 60,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          FilterButton(
+                            label: 'Sharpen',
+                            isSelected: selectedFilter == 'sharpen',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'sharpen' ? null : 'sharpen'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Brightness',
+                            isSelected: selectedFilter == 'brightness',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'brightness'
+                                    ? null
+                                    : 'brightness'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Contrast',
+                            isSelected: selectedFilter == 'contrast',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'contrast'
+                                    ? null
+                                    : 'contrast'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Saturation',
+                            isSelected: selectedFilter == 'saturation',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'saturation'
+                                    ? null
+                                    : 'saturation'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Hue',
+                            isSelected: selectedFilter == 'hue',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'hue' ? null : 'hue'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Exposure',
+                            isSelected: selectedFilter == 'exposure',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'exposure'
+                                    ? null
+                                    : 'exposure'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Gamma',
+                            isSelected: selectedFilter == 'gamma',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'gamma' ? null : 'gamma'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Vibrance',
+                            isSelected: selectedFilter == 'vibrance',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'vibrance'
+                                    ? null
+                                    : 'vibrance'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Invert',
+                            isSelected: selectedFilter == 'invert',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'invert' ? null : 'invert'),
+                          ),
+                          const SizedBox(width: 8),
+                          FilterButton(
+                            label: 'Sepia',
+                            isSelected: selectedFilter == 'sepia',
+                            onTap: () => setState(() => selectedFilter =
+                                selectedFilter == 'sepia' ? null : 'sepia'),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
