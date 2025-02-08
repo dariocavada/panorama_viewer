@@ -7,6 +7,7 @@ import 'package:example/filter-configurations/sepia_filter_configuration.dart';
 import 'package:example/filter-configurations/sharpen_filter_configuration.dart';
 import 'package:example/filter-configurations/vibrance_filter_configuration.dart';
 import 'package:example/screens/example_screen_5.dart';
+import 'package:example/screens/example_screen_7.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_filters/flutter_image_filters.dart';
 
@@ -119,12 +120,25 @@ class MainScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Example 6 - With Image Filters'),
+            title: const Text('Example 6 - Image Editor'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const ExampleScreen6(
+                    title: 'Image Editor',
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Example 7 - Image Filters'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ExampleScreen7(
                     title: 'Image Filters',
                   ),
                 ),
