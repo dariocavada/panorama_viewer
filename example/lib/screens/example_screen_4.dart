@@ -30,7 +30,6 @@ class ExampleScreen4State extends State<ExampleScreen4> {
       body: Stack(
         children: [
           PanoramaViewer(
-            key: _panoramaKey,
             animSpeed: .1,
             sensorControl: SensorControl.orientation,
             panoramaController: panoramaController,
