@@ -9,24 +9,16 @@ class ExampleScreen4 extends StatefulWidget {
 }
 
 class ExampleScreen4State extends State<ExampleScreen4> {
-  final GlobalKey<PanoramaState> _panoramaKey = GlobalKey();
+  PanoramaController panoramaController = PanoramaController();
   double _latitudeDegrees = 0; // Slider value in degrees
   double _longitudeDegrees = 0; // Slider value in degrees
 
   void _zoomIn() {
-    final currentState = _panoramaKey.currentState;
-    if (currentState != null) {
-      double currentZoom = currentState.scene!.camera.zoom;
-      currentState.setZoom(currentZoom + 0.5); // Adjust the zoom step as needed
-    }
+    panoramaController.setZoom(panoramaController.getZoom() + 0.5);
   }
 
   void _zoomOut() {
-    final currentState = _panoramaKey.currentState;
-    if (currentState != null) {
-      double currentZoom = currentState.scene!.camera.zoom;
-      currentState.setZoom(currentZoom - 0.5); // Adjust the zoom step as needed
-    }
+    panoramaController.setZoom(panoramaController.getZoom() - 0.5);
   }
 
   @override
@@ -41,6 +33,7 @@ class ExampleScreen4State extends State<ExampleScreen4> {
             key: _panoramaKey,
             animSpeed: .1,
             sensorControl: SensorControl.orientation,
+            panoramaController: panoramaController,
             child: Image.asset('assets/panorama1.webp'),
           ),
           Positioned(
@@ -56,8 +49,7 @@ class ExampleScreen4State extends State<ExampleScreen4> {
                   setState(() {
                     _latitudeDegrees = value;
                   });
-                  // Convert degrees to radians before updating
-                  _panoramaKey.currentState?.setView(
+                  panoramaController.setView(
                     _latitudeDegrees,
                     _longitudeDegrees,
                   );
@@ -76,8 +68,7 @@ class ExampleScreen4State extends State<ExampleScreen4> {
                 setState(() {
                   _longitudeDegrees = value;
                 });
-                // Convert degrees to radians before updating
-                _panoramaKey.currentState?.setView(
+                panoramaController.setView(
                   _latitudeDegrees,
                   _longitudeDegrees,
                 );
