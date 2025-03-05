@@ -506,9 +506,12 @@ class PanoramaState extends State<PanoramaViewer>
   }
 
   void _panoramaControllerFunctions() {
-    if (widget.panoramaController!._newZoom) _setZoom(widget.panoramaController!._zoom);
-    if (widget.panoramaController!._newView) _setView(widget.panoramaController!._latitude, widget.panoramaController!._longitude);
-    if (widget.panoramaController!._newAnimSpeed) _setAnimSpeed(widget.panoramaController!._animSpeed);
+    switch (widget.panoramaController!._type) {
+      case _setType._none: break;
+      case _setType._setZoom: _setZoom(widget.panoramaController!._zoom); break;
+      case _setType._setView: _setView(widget.panoramaController!._latitude, widget.panoramaController!._longitude); break;
+      case _setType._setAnimSpeed: _setAnimSpeed(widget.panoramaController!._animSpeed); break;
+    }
   }
 
   // Add the setZoom method here
@@ -692,6 +695,8 @@ Quaternion orientationToQuaternion(Vector3 v) {
   return Quaternion.fromRotation(m.getRotation());
 }
 
+enum _setType {_none, _setZoom, _setView, _setAnimSpeed}
+
 class PanoramaController extends ChangeNotifier {
   PanoramaController();
 
@@ -700,9 +705,7 @@ class PanoramaController extends ChangeNotifier {
   double _longitude = -1;
   double _animSpeed = -1;
 
-  bool _newZoom = false;
-  bool _newView = false;
-  bool _newAnimSpeed = false;
+  _setType _type = _setType._none;
 
   double _currentZoom = 1.0;
   double _currentLatitude = 0.0;
@@ -710,20 +713,20 @@ class PanoramaController extends ChangeNotifier {
 
   void setZoom(double zoom) {
     this._zoom = zoom;
-    this._newZoom = true;
+    this._setType = _setType._newZoom;
     notifyListeners();
   }
 
   void setView(double latitude, double longitude) {
     this._latitude = latitude;
     this._longitude = longitude;
-    this._newView = true;
+    this._type = _setType._setView;
     notifyListeners();
   }
 
   void setAnimSpeed(double animSpeed) {
     this._animSpeed = animSpeed;
-    this._newAnimSpeed = true;
+    this._type = _setType._setAnimSpeed;
     notifyListeners();
   }
 
