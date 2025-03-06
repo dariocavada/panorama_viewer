@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:panorama_viewer/panorama_viewer.dart';
 
@@ -38,9 +40,9 @@ class ExampleScreen2State extends State<ExampleScreen3> {
       children: [
         TextButton(
           style: ButtonStyle(
-            shape: MaterialStateProperty.all(const CircleBorder()),
-            backgroundColor: MaterialStateProperty.all(Colors.black38),
-            foregroundColor: MaterialStateProperty.all(Colors.white),
+            shape: WidgetStateProperty.all(const CircleBorder()),
+            backgroundColor: WidgetStateProperty.all(Colors.black38),
+            foregroundColor: WidgetStateProperty.all(Colors.white),
           ),
           onPressed: onPressed,
           child: Icon(icon),

@@ -1,5 +1,3 @@
-library panorama_viewer;
-
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
@@ -155,8 +153,8 @@ class PanoramaState extends State<PanoramaViewer>
   double zoomDelta = 0;
   late Offset _lastFocalPoint;
   double? _lastZoom;
-  double _radius = 500;
-  double _dampingFactor = 0.05;
+  final double _radius = 500;
+  final double _dampingFactor = 0.05;
   double _animateDirection = 1.0;
   double _animSpeed = 0.0;
   late AnimationController _controller;
@@ -247,13 +245,16 @@ class PanoramaState extends State<PanoramaViewer>
         zoomDelta.abs() < 0.001) {
       if (widget.sensorControl == SensorControl.none &&
           _animSpeed == 0 &&
-          _controller.isAnimating) _controller.stop();
+          _controller.isAnimating) {
+        _controller.stop();
+      }
     }
-    
+
     // inform the panoramaController of the new lat/lon and zoom
     widget.panoramaController?._currentLatitude = latitudeRad * 180 / pi;
     widget.panoramaController?._currentLongitude = longitudeRad * 180 / pi;
-    widget.panoramaController?._currentZoom = zoom.clamp(widget.minZoom, widget.maxZoom);
+    widget.panoramaController?._currentZoom =
+        zoom.clamp(widget.minZoom, widget.maxZoom);
 
     // rotate for screen orientation
     Quaternion q = Quaternion.axisAngle(Vector3(0, 0, 1), screenOrientationRad);
@@ -458,7 +459,8 @@ class PanoramaState extends State<PanoramaViewer>
     _streamController = StreamController<Null>.broadcast();
     _stream = _streamController.stream;
 
-    widget.panoramaController?.addListener(() => _panoramaControllerFunctions());
+    widget.panoramaController
+        ?.addListener(() => _panoramaControllerFunctions());
 
     _updateSensorControl();
 
@@ -507,10 +509,18 @@ class PanoramaState extends State<PanoramaViewer>
 
   void _panoramaControllerFunctions() {
     switch (widget.panoramaController!._type) {
-      case _setType._none: break;
-      case _setType._setZoom: _setZoom(widget.panoramaController!._zoom); break;
-      case _setType._setView: _setView(widget.panoramaController!._latitude, widget.panoramaController!._longitude); break;
-      case _setType._setAnimSpeed: _setAnimSpeed(widget.panoramaController!._animSpeed); break;
+      case _SetType._none:
+        break;
+      case _SetType._setZoom:
+        _setZoom(widget.panoramaController!._zoom);
+        break;
+      case _SetType._setView:
+        _setView(widget.panoramaController!._latitude,
+            widget.panoramaController!._longitude);
+        break;
+      case _SetType._setAnimSpeed:
+        _setAnimSpeed(widget.panoramaController!._animSpeed);
+        break;
     }
   }
 
@@ -695,7 +705,7 @@ Quaternion orientationToQuaternion(Vector3 v) {
   return Quaternion.fromRotation(m.getRotation());
 }
 
-enum _setType {_none, _setZoom, _setView, _setAnimSpeed}
+enum _SetType { _none, _setZoom, _setView, _setAnimSpeed }
 
 class PanoramaController extends ChangeNotifier {
   PanoramaController();
@@ -705,28 +715,28 @@ class PanoramaController extends ChangeNotifier {
   double _longitude = -1;
   double _animSpeed = -1;
 
-  _setType _type = _setType._none;
+  _SetType _type = _SetType._none;
 
   double _currentZoom = 1.0;
   double _currentLatitude = 0.0;
   double _currentLongitude = 0.0;
 
   void setZoom(double zoom) {
-    this._zoom = zoom;
-    this._setType = _setType._newZoom;
+    _zoom = zoom;
+    _type = _SetType._setZoom;
     notifyListeners();
   }
 
   void setView(double latitude, double longitude) {
-    this._latitude = latitude;
-    this._longitude = longitude;
-    this._type = _setType._setView;
+    _latitude = latitude;
+    _longitude = longitude;
+    _type = _SetType._setView;
     notifyListeners();
   }
 
   void setAnimSpeed(double animSpeed) {
-    this._animSpeed = animSpeed;
-    this._type = _setType._setAnimSpeed;
+    _animSpeed = animSpeed;
+    _type = _SetType._setAnimSpeed;
     notifyListeners();
   }
 
@@ -742,4 +752,3 @@ class PanoramaController extends ChangeNotifier {
     return _currentLongitude;
   }
 }
-

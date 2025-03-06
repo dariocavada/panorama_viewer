@@ -1,3 +1,7 @@
+## 2.0.4 
+* Merge #PR19, #PR20. Use of controller instead of flags thank you to @Henk-Keijzer
+* Minor updates to the code
+
 ## 2.0.3
 * update dchs_motion_sensors to 2.0.1 for latest version of Flutter (3.29.0)
 
