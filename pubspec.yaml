@@ -1,7 +1,7 @@
 name: panorama_viewer
 description: Panorama Viewer - A 360-degree panorama viewer reusable widget.
 # pub.dev using `flutter pub publish`.
-version: 2.0.5
+version: 2.0.6
 homepage: https://github.com/dariocavada/panorama_viewer
 
 environment:
