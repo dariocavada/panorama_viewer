@@ -1,3 +1,6 @@
+## 2.0.6
+* Minor format updates
+
 ## 2.0.5
 * Minor updates to the code
 * Merge #PR22 thank you to @StefanosKouzounis
