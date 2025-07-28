@@ -1,3 +1,10 @@
+## 2.0.5
+* Minor updates to the code
+* Merge #PR22 thank you to @StefanosKouzounis
+    * Updated the description in pubspec.yaml to fix Failed report section
+    * Follow Dart file conventions in pub.dev
+    * Implemented null-aware operators and added null checks to prevent potential runtime crashes.
+
 ## 2.0.4 
 * Merge #PR19, #PR20. Use of controller instead of flags thank you to @Henk-Keijzer
 * Minor updates to the code
