@@ -6,7 +6,7 @@ homepage: https://github.com/dariocavada/panorama_viewer
 
 environment:
   sdk: '>=3.5.3 <4.0.0'
-  flutter: ">=3.10.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
