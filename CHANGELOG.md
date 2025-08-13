@@ -1,3 +1,7 @@
+## 2.0.7
+* Fixed black screen issue introduced in v2.0.6.  
+* Corrected scene initialization check (`surface == null`) to restore compatibility.
+
 ## 2.0.6
 * Minor format updates
 

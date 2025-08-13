@@ -368,7 +368,7 @@ class PanoramaState extends State<PanoramaViewer>
     scene.camera.fov = 75;
     scene.camera.zoom = widget.zoom;
     scene.camera.position.setFrom(Vector3(0, 0, 0.1));
-    if (widget.child != null && surface != null) {
+    if (widget.child != null && surface == null) {
       final Mesh mesh = generateSphereMesh(
           radius: _radius,
           latSegments: widget.latSegments,
