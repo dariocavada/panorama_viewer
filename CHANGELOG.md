@@ -1,3 +1,21 @@
+## 3.0.0
+
+### Breaking changes
+
+* Require Flutter 3.47 or newer and Dart 3.13 or newer (previously Flutter 3.3 / Dart 3.5.3 in this package).
+* Upgrade `dchs_motion_sensors` from `^2.0.1` to `^3.0.0`, which requires `vector_math ^2.4.3`.
+* Android apps using AGP 8 or opting out of AGP 9 built-in Kotlin must provide Kotlin Gradle Plugin 2.2.20 or newer. Kotlin 1.8 hosts are no longer supported.
+* Existing iOS apps must account for the sensor plugin's Swift-only registration and Swift Package Manager support, introduced in 2.0.2. The plugin requires iOS 13; the updated example uses Flutter 3.47's iOS deployment target of 15.
+
+### Updates
+
+* Keep the existing `PanoramaViewer`, `PanoramaController` and `SensorControl` Dart APIs; no application Dart changes are required for this upgrade.
+* Update the example to AGP 9.1.1 / Gradle 9.3.1 with built-in Kotlin, Kotlin 2.4.20 on the plugin classpath, Java / Kotlin target 17 and the legacy Android DSL required by Flutter 3.47.
+* Migrate the example's iOS host to Swift Package Manager integration, the UIScene lifecycle and iOS 15.
+* Align package and example SDK constraints and update `flutter_lints` to 6.0.0.
+* Add explicit callback parameter types in the hotspot example to satisfy the updated lints.
+* Inherit the sensor plugin's AGP 9 compatibility fix and native replies for sensor interval changes.
+
 ## 2.0.7
 * Fixed black screen issue introduced in v2.0.6.  
 * Corrected scene initialization check (`surface == null`) to restore compatibility.

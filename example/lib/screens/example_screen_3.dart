@@ -25,7 +25,7 @@ class ExampleScreen2State extends State<ExampleScreen3> {
     Image.asset('assets/panorama3.webp'),
   ];
 
-  void onViewChanged(longitude, latitude, tilt) {
+  void onViewChanged(double longitude, double latitude, double tilt) {
     setState(() {
       _lon = longitude;
       _lat = latitude;
